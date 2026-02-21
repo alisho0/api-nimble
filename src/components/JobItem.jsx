@@ -6,8 +6,8 @@ export const JobItem = ({ job, candidate }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const onSubmit = async (e) => {
-    if (!repoUrl) {
+  const onSubmit = async () => {
+    if (!repoUrl.trim()) {
       setMessage("Se debe ingresar el URL del repositorio");
       return;
     }
@@ -16,12 +16,13 @@ export const JobItem = ({ job, candidate }) => {
     setMessage(null);
 
     try {
-      const res = await postApplyJob({
+        const res = await postApplyJob({
         uuid: candidate.uuid,
-        jobId: job.id,
-        candidateId: candidate.id,
-        repoUrl: repoUrl,
-      });
+        jobId: String(job.id),
+        candidateId: candidate.candidateId,
+        applicationId: candidate.applicationId,
+        repoUrl: repoUrl.trim(),
+        });
 
       if (res.ok) {
         setMessage("Aplicación enviada exitosamente");
